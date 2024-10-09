@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.chau.iot"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -68,4 +68,11 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+
+    //MQTT
+    implementation("org.eclipse.paho:org.eclipse.paho.android.service:1.0.2") {
+        exclude(group = "com.android.support", module = "support-v4")
+    }
+
 }
+

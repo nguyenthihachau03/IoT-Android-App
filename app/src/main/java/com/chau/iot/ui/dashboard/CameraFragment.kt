@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.chau.iot.CustomCategory
 import com.chau.iot.GestureRecognizerHelper
 import com.chau.iot.GestureRecognizerResultsAdapter
 import com.chau.iot.MainViewModel
@@ -21,6 +22,7 @@ import com.google.mediapipe.tasks.vision.core.RunningMode
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import com.chau.iot.MqttHelper
 
 class CameraFragment : Fragment(), GestureRecognizerHelper.GestureRecognizerListener {
 
@@ -40,6 +42,10 @@ class CameraFragment : Fragment(), GestureRecognizerHelper.GestureRecognizerList
     private var cameraFacing = CameraSelector.LENS_FACING_FRONT
 
     private lateinit var backgroundExecutor: ExecutorService
+    private lateinit var mqttHelper: MqttHelper  // Thêm MqttHelper để gửi tín hiệu
+
+    // Biến lưu hành động trước đó
+    private var previousGesture: String? = null
 
     // Initialize gestureRecognizerResultAdapter
     private val gestureRecognizerResultAdapter: GestureRecognizerResultsAdapter by lazy {
@@ -99,6 +105,9 @@ class CameraFragment : Fragment(), GestureRecognizerHelper.GestureRecognizerList
         }
 
         backgroundExecutor = Executors.newSingleThreadExecutor()
+
+        // Khởi tạo MQTT Helper
+        mqttHelper = MqttHelper(requireContext())
 
         fragmentCameraBinding.viewFinder.post {
             setUpCamera()
@@ -161,12 +170,63 @@ class CameraFragment : Fragment(), GestureRecognizerHelper.GestureRecognizerList
         gestureRecognizerHelper.recognizeLiveStream(imageProxy = imageProxy)
     }
 
+//    override fun onResults(resultBundle: GestureRecognizerHelper.ResultBundle) {
+//        activity?.runOnUiThread {
+//            if (_fragmentCameraBinding != null) {
+//                val gestureCategories = resultBundle.results.first().gestures()
+//                if (gestureCategories.isNotEmpty()) {
+//                    gestureRecognizerResultAdapter.updateResults(gestureCategories.first())
+//                } else {
+//                    gestureRecognizerResultAdapter.updateResults(emptyList())
+//                }
+//                fragmentCameraBinding.overlay.setResults(
+//                    resultBundle.results.first(),
+//                    resultBundle.inputImageHeight,
+//                    resultBundle.inputImageWidth,
+//                    RunningMode.LIVE_STREAM
+//                )
+//                fragmentCameraBinding.overlay.invalidate()
+//            }
+//        }
+//    }
+
+
+
     override fun onResults(resultBundle: GestureRecognizerHelper.ResultBundle) {
         activity?.runOnUiThread {
             if (_fragmentCameraBinding != null) {
                 val gestureCategories = resultBundle.results.first().gestures()
                 if (gestureCategories.isNotEmpty()) {
-                    gestureRecognizerResultAdapter.updateResults(gestureCategories.first())
+                    val firstGesture = gestureCategories.first().first()
+                    val gestureName = firstGesture.categoryName()
+                    // Chuyển đổi tên cử chỉ thành hành động mong muốn
+                    val customGestureName = when (gestureName) {
+                        "Open_Palm" -> "Tiến"
+                        "Closed_Fist" -> "Lùi"
+                        "Pointing_Up" -> "Trái"
+                        "Victory" -> "Phải"
+                        "Thumb_Up" -> "Bật đèn"
+                        "Thumb_Down" -> "Tắt đèn"
+                        "None" -> "None"
+                        else -> gestureName
+                    }
+
+                    // Chỉ gửi tín hiệu khi hành động hiện tại khác hành động trước đó
+                    if (customGestureName != previousGesture) {
+                        when (customGestureName) {
+                            "Tiến" -> mqttHelper.publishMessage("tien")
+                            "Lùi" -> mqttHelper.publishMessage("lui")
+                            "Trái" -> mqttHelper.publishMessage("trai")
+                            "Phải" -> mqttHelper.publishMessage("phai")
+                            "Bật đèn" -> mqttHelper.publishMessage("den_on")
+                            "Tắt đèn" -> mqttHelper.publishMessage("den_off")
+                        }
+                        // Cập nhật hành động trước đó
+                        previousGesture = customGestureName
+                    }
+
+                    val customCategory = CustomCategory(customGestureName, firstGesture.score())
+                    gestureRecognizerResultAdapter.updateResults(listOf(customCategory))
                 } else {
                     gestureRecognizerResultAdapter.updateResults(emptyList())
                 }
@@ -180,6 +240,8 @@ class CameraFragment : Fragment(), GestureRecognizerHelper.GestureRecognizerList
             }
         }
     }
+
+
 
     override fun onError(error: String, errorCode: Int) {
         activity?.runOnUiThread {

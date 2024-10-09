@@ -11,18 +11,17 @@ import java.util.Locale
 class GestureRecognizerResultsAdapter :
     RecyclerView.Adapter<GestureRecognizerResultsAdapter.ViewHolder>() {
 
-    private var adapterCategories: MutableList<Category?> = mutableListOf()
+    private var adapterCategories: MutableList<CustomCategory?> = mutableListOf()
     private var adapterSize: Int = 0
 
-    fun updateResults(categories: List<Category>?) {
+    fun updateResults(categories: List<CustomCategory>?) {
         adapterCategories = MutableList(adapterSize) { null }
         if (categories != null) {
-            val sortedCategories = categories.sortedByDescending { it.score() }
+            val sortedCategories = categories.sortedByDescending { it.score }
             val min = minOf(sortedCategories.size, adapterCategories.size)
             for (i in 0 until min) {
                 adapterCategories[i] = sortedCategories[i]
             }
-            adapterCategories.sortBy { it?.index() }
             notifyDataSetChanged()
         }
     }
@@ -44,8 +43,8 @@ class GestureRecognizerResultsAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        adapterCategories[position].let { category ->
-            holder.bind(category?.categoryName(), category?.score())
+        adapterCategories[position]?.let { category ->
+            holder.bind(category.name, category.score)
         }
     }
 
