@@ -40,11 +40,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Dịch vụ MQTT -->
-        <service android:name="org.eclipse.paho.android.service.MqttService"
-            android:enabled="true"
-            android:exported="false" />
-
         <!-- BroadcastReceiver cho AlarmPingSender -->
         <receiver
             android:name="com.chau.iot.AlarmReceiver"

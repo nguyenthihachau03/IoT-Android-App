@@ -24,7 +24,10 @@ class HomeFragment : Fragment() {
         // Khởi tạo MQTT Helper
         mqttHelper = MqttHelper(requireContext())
 
-        // Đăng ký sự kiện khi bấm các button
+        // Gọi hàm connect() để bắt đầu kết nối
+        mqttHelper.connect()
+
+        // Đăng ký sự kiện khi bấm các button điều khiển xe
         binding.btnTien.setOnClickListener {
             mqttHelper.publishMessage("tien") // Gửi tín hiệu 'tien'
         }
@@ -48,6 +51,23 @@ class HomeFragment : Fragment() {
         binding.sDen.setOnCheckedChangeListener { _, isChecked ->
             val message = if (isChecked) "den_on" else "den_off"
             mqttHelper.publishMessage(message) // Gửi tín hiệu bật/tắt đèn
+        }
+
+        // Đăng ký sự kiện cho nút điều khiển gear
+        binding.btnGear0.setOnClickListener {
+            mqttHelper.publishMessage("stop") // Gửi tín hiệu 'stop' khi gear 0
+        }
+
+        binding.btnGear1.setOnClickListener {
+            mqttHelper.publishMessage("gear1") // Gửi tín hiệu 'gear1'
+        }
+
+        binding.btnGear2.setOnClickListener {
+            mqttHelper.publishMessage("gear2") // Gửi tín hiệu 'gear2'
+        }
+
+        binding.btnGear3.setOnClickListener {
+            mqttHelper.publishMessage("gear3") // Gửi tín hiệu 'gear3'
         }
 
         return binding.root

@@ -1,24 +1,22 @@
 pluginManagement {
     repositories {
-        maven {
-            setUrl("https://repo.eclipse.org/content/repositories/paho-releases/")
-        }
         gradlePluginPortal()
-        mavenCentral()
         google()
+        mavenCentral()
+        maven { url = uri("https://repo.eclipse.org/content/repositories/paho-releases/") }
+        maven { url = uri("https://jitpack.io") }  // Added JitPack for MQTT library
     }
 }
 
 dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven {
-            setUrl("https://repo.eclipse.org/content/repositories/paho-releases/")
-        }
-        mavenCentral()
         google()
+        mavenCentral()
+        maven { url = uri("https://repo.eclipse.org/content/repositories/paho-releases/") }
+        maven { url = uri("https://jitpack.io") }  // Added JitPack for MQTT library
     }
 }
 
 rootProject.name = "IOT"
 include(":app")
- 

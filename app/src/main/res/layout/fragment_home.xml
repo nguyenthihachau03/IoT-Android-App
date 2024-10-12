@@ -2,70 +2,154 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#FFFFFF">
 
+    <!-- Nút Tiến -->
     <Button
         android:id="@+id/btnTien"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="49dp"
-        android:layout_marginEnd="67dp"
-        android:layout_marginBottom="84dp"
-        android:text="Tiến"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="#009688"
+        android:text="▲"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/btnLui"
-        app:layout_constraintEnd_toEndOf="@+id/btnPhai"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/btnTrai" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.843" />
 
-    <Button
-        android:id="@+id/btnLui"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
-        android:text="Lùi"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnPhai"
-        app:layout_constraintHorizontal_bias="0.65"
-        app:layout_constraintStart_toEndOf="@+id/btnTrai" />
-
+    <!-- Nút Lùi -->
     <Button
         android:id="@+id/btnTrai"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="108dp"
-        android:text="Trái"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="#009688"
+        android:text="◀"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnLui"
+        app:layout_constraintEnd_toStartOf="@+id/btnTien"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Nút Phải -->
+
+    <!-- Nút Còi -->
+    <Button
+        android:id="@+id/btnLui"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="92dp"
+        android:backgroundTint="#009688"
+        android:text="▼"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnPhai"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginBottom="108dp"
-        android:text="Phải"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnTrai" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="32dp"
+        android:backgroundTint="#009688"
+        android:text="▶"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnLui"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/btnTien" />
+
+    <!-- Nút Bật/Tắt Đèn -->
 
     <Button
         android:id="@+id/btnCoi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="208dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="68dp"
-        android:text="Còi"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:backgroundTint="#FF5722"
+        android:text="🔔"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Switch
+    <!-- Thiết kế lại switch Đèn với màu sắc hiện đại hơn -->
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/sDen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="76dp"
-        android:text="Bật/Tắt Đèn"
-        app:layout_constraintBottom_toTopOf="@+id/btnCoi"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:text="Đèn"
+        android:textColor="#009688"
+        android:textSize="18sp"
+        android:thumbTint="@color/white"
+        android:trackTint="@color/purple_500"
+        app:layout_constraintTop_toBottomOf="@+id/btnCoi"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp" />
+
+    <!-- Hàng nút điều khiển số (gear) ở bên trái theo chiều dọc -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/btnTrai"
+        app:layout_constraintEnd_toStartOf="@+id/btnTrai"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
+        android:layout_marginBottom="32dp">
+
+        <!-- Sắp xếp nút gear thẳng hàng trong LinearLayout -->
+        <Button
+            android:id="@+id/btn_gear0"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:backgroundTint="#673AB7"
+            android:text="0"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btn_gear1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:backgroundTint="#673AB7"
+            android:text="1"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btn_gear2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:backgroundTint="#673AB7"
+            android:text="2"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btn_gear3"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:backgroundTint="#673AB7"
+            android:text="3"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

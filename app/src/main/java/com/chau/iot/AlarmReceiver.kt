@@ -6,16 +6,22 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import org.eclipse.paho.android.service.MqttService
+import info.mqtt.android.service.MqttAndroidClient
+import info.mqtt.android.service.Ack
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 
 class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val action = intent?.action
         if (action != null && action == "ALARM_RECEIVER") {
-            // Đây là nơi xử lý nếu nhận được broadcast từ MQTT Alarm Ping Sender
-            val mqttServiceIntent = Intent(context, MqttService::class.java)
-            context?.startService(mqttServiceIntent)
+            Log.d("AlarmReceiver", "Alarm broadcast received")
+
+            context?.let {
+                // Tạo lại kết nối MQTT hoặc thực hiện hành động ping MQTT
+                val mqttHelper = MqttHelper(it)
+                mqttHelper.connect() // Kết nối lại hoặc ping server
+            }
         }
     }
 }
@@ -25,13 +31,14 @@ class AlarmPingSender(val context: Context, val alarmManager: AlarmManager) {
     private var pendingIntent: PendingIntent? = null
 
     fun start() {
-        val intent = Intent(context, AlarmReceiver::class.java)
-        intent.action = "ALARM_RECEIVER"
+        val intent = Intent(context, AlarmReceiver::class.java).apply {
+            action = "ALARM_RECEIVER"
+        }
         pendingIntent = PendingIntent.getBroadcast(
             context,
             0,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE // Sử dụng FLAG_IMMUTABLE nếu cần cho các phiên bản Android mới hơn
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val interval = 60 * 1000L // 60 giây
@@ -48,14 +55,9 @@ class AlarmPingSender(val context: Context, val alarmManager: AlarmManager) {
     }
 
     fun stop() {
-        try {
-            // Kiểm tra nếu pendingIntent không null trước khi hủy
-            pendingIntent?.let {
-                alarmManager.cancel(it)
-                Log.d("AlarmPingSender", "Ping alarm canceled")
-            } ?: Log.e("AlarmPingSender", "PendingIntent is null, cannot cancel alarm")
-        } catch (e: Exception) {
-            Log.e("AlarmPingSender", "Error while canceling alarm: ${e.message}")
-        }
+        pendingIntent?.let {
+            alarmManager.cancel(it)
+            Log.d("AlarmPingSender", "Ping alarm canceled")
+        } ?: Log.e("AlarmPingSender", "PendingIntent is null, cannot cancel alarm")
     }
 }

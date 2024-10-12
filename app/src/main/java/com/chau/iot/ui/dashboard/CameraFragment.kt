@@ -99,6 +99,13 @@ class CameraFragment : Fragment(), GestureRecognizerHelper.GestureRecognizerList
     @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Khởi tạo MQTT Helper
+        mqttHelper = MqttHelper(requireContext())
+
+        // Gọi hàm connect() để bắt đầu kết nối
+        mqttHelper.connect()
+
         with(fragmentCameraBinding.recyclerviewResults) {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = gestureRecognizerResultAdapter
@@ -106,8 +113,6 @@ class CameraFragment : Fragment(), GestureRecognizerHelper.GestureRecognizerList
 
         backgroundExecutor = Executors.newSingleThreadExecutor()
 
-        // Khởi tạo MQTT Helper
-        mqttHelper = MqttHelper(requireContext())
 
         fragmentCameraBinding.viewFinder.post {
             setUpCamera()
@@ -203,8 +208,8 @@ class CameraFragment : Fragment(), GestureRecognizerHelper.GestureRecognizerList
                     val customGestureName = when (gestureName) {
                         "Open_Palm" -> "Tiến"
                         "Closed_Fist" -> "Lùi"
-                        "Pointing_Up" -> "Trái"
-                        "Victory" -> "Phải"
+                        "Pointing_Up" -> "Stop"
+                        "Victory" -> "Gear3"
                         "Thumb_Up" -> "Bật đèn"
                         "Thumb_Down" -> "Tắt đèn"
                         "None" -> "None"
@@ -216,10 +221,11 @@ class CameraFragment : Fragment(), GestureRecognizerHelper.GestureRecognizerList
                         when (customGestureName) {
                             "Tiến" -> mqttHelper.publishMessage("tien")
                             "Lùi" -> mqttHelper.publishMessage("lui")
-                            "Trái" -> mqttHelper.publishMessage("trai")
-                            "Phải" -> mqttHelper.publishMessage("phai")
+                            "Stop" -> mqttHelper.publishMessage("stop")
+                            "Gear3" -> mqttHelper.publishMessage("gear3")
                             "Bật đèn" -> mqttHelper.publishMessage("den_on")
                             "Tắt đèn" -> mqttHelper.publishMessage("den_off")
+                            "None" -> mqttHelper.publishMessage("none")
                         }
                         // Cập nhật hành động trước đó
                         previousGesture = customGestureName

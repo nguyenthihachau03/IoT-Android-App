@@ -61,18 +61,19 @@ dependencies {
     implementation("androidx.camera:camera-extensions:1.2.2")
 
     // MediaPipe dependencies
-    implementation ("com.google.mediapipe:tasks-vision:latest.release")
-    implementation ("org.tensorflow:tensorflow-lite:2.10.0")
+    implementation("com.google.mediapipe:tasks-vision:latest.release")
+    implementation("org.tensorflow:tensorflow-lite:2.10.0")
 
     // Testing
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 
-    //MQTT
-    implementation("org.eclipse.paho:org.eclipse.paho.android.service:1.0.2") {
-        exclude(group = "com.android.support", module = "support-v4")
-    }
+    // MQTT library that supports Android 12
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("com.github.hannesa2:paho.mqtt.android:3.6.4")  // Use the specific version
 
+    // Keep the Eclipse Paho client library
+    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
 }
 
