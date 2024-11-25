@@ -210,8 +210,8 @@ class CameraFragment : Fragment(), GestureRecognizerHelper.GestureRecognizerList
                         "Closed_Fist" -> "Lùi"
                         "Pointing_Up" -> "Stop"
                         "Victory" -> "Gear3"
-                        "Thumb_Up" -> "Bật đèn"
-                        "Thumb_Down" -> "Tắt đèn"
+                        "Thumb_Up" -> "Phải"
+                        "Thumb_Down" -> "Trái"
                         "None" -> "None"
                         else -> gestureName
                     }
@@ -223,8 +223,8 @@ class CameraFragment : Fragment(), GestureRecognizerHelper.GestureRecognizerList
                             "Lùi" -> mqttHelper.publishMessage("lui")
                             "Stop" -> mqttHelper.publishMessage("stop")
                             "Gear3" -> mqttHelper.publishMessage("gear3")
-                            "Bật đèn" -> mqttHelper.publishMessage("den_on")
-                            "Tắt đèn" -> mqttHelper.publishMessage("den_off")
+                            "Phải" -> mqttHelper.publishMessage("phai")
+                            "Trái" -> mqttHelper.publishMessage("trai")
                             "None" -> mqttHelper.publishMessage("none")
                         }
                         // Cập nhật hành động trước đó
