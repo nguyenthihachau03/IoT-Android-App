@@ -34,7 +34,6 @@ class HomeFragment : Fragment() {
         mqttHelper = MqttHelper(requireContext())
         mqttHelper.connect()
 
-        // Khởi tạo giá trị mặc định cho TextView và ẩn các icon
         binding.nNhietdo.text = defaultTemp
         binding.nDoam.text = defaultHumidity
         binding.iconTemperature.visibility = View.GONE
